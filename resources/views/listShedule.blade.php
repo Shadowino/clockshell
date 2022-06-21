@@ -58,8 +58,15 @@
   </style>
 </head>
 <body>
-  <div class="short_button">
-
+  <div class="lenta">
+    <form class="" action="/list" method="get">
+      <div class="day">
+         <input type="submit" name="" value="показат с даты">
+      </div>
+      <div class="day">
+        <input type="date" name="date" value="<?php echo $selectdate ?>">
+      </div>
+    </form>
   </div>
   <div class="dateLine">
     <?php
@@ -76,40 +83,31 @@
 
 
   <div class="lenta">
-    <!-- образец V
-    <div class="day">
-    <div class="double">
-    <div class="mark"></div>
-    <div class="times">
-    <p>23:59 - 23:59</p>
-    <p>23:59 - 23:59</p>
-  </div>
-</div>
-</div> -->
-<?php
-$days = $data->all();
-$h = array("первая","вторая","третья","четвертая");
-foreach ($days as $key => $day) {
-  echo "<a href='/edit/$dates[$key]'><div class='day'>";
-  $day = json_decode($day, true);
-  $cntd = 0;
-  foreach ($day as $double) {
-    echo "<div class='double'>
-    <div class='mark'></div>
-    <div class='times'>
-    <p> $double[0] - $double[1] </p>";
-    if (isset($double[2])) {
-      echo "<p>$double[2] - $double[3]</p>";
+
+    <?php
+    $days = $data->all();
+    $h = array("первая","вторая","третья","четвертая");
+    foreach ($days as $key => $day) {
+      echo "<a href='/edit/$dates[$key]'><div class='day'>";
+      $day = json_decode($day, true);
+      $cntd = 0;
+      foreach ($day as $double) {
+        echo "<div class='double'>
+        <div class='mark'></div>
+        <div class='times'>
+        <p> $double[0] - $double[1] </p>";
+        if (isset($double[2])) {
+          echo "<p>$double[2] - $double[3]</p>";
+        }
+        echo "
+        </div>
+        </div>";
+        $cntd++;
+      }
+      echo "</div></a>";
     }
-    echo "
-    </div>
-    </div>";
-    $cntd++;
-  }
-  echo "</div></a>";
-}
-?>
-</div>
+    ?>
+  </div>
 
 
 </body>
