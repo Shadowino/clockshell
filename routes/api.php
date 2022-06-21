@@ -8,6 +8,7 @@ use App\Http\Controllers\sheduleController;
 //  шаблон
 // Route::get('/url', [sheduleController::class, 'method'])
 
+Route::get('/today', [sheduleController::class, 'today']);
 Route::get('/day/{id}', [sheduleController::class, 'SheduleByID']);
 Route::get('/date/{date}', [sheduleController::class, 'SheduleByDate']);
 Route::get('/date/{date1}/{date2}', [sheduleController::class, 'SheduleFromTo']);

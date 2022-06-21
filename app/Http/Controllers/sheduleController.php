@@ -8,6 +8,9 @@ use App\Models\calendar;
 
 class sheduleController extends Controller
 {
+  public function today(){
+    return calendar::where('day', date('Y.m.d'))->value('timetable');
+  }
   // Comment
   public function SheduleByID($id){
     return DB::table('calendar')->where('id', $id)->value('timetable');
