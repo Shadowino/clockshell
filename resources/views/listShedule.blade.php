@@ -11,6 +11,7 @@
   }
   .lenta{
     margin-top: 10px;
+    margin-bottom: 10px;
     width: 100%;
   }
   .date{

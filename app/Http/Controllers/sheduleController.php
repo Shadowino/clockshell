@@ -75,15 +75,16 @@ class sheduleController extends Controller
     // print_r($day);
     if($day != null){
       // обновление  записи
-      echo "update";
+      // echo "update";
       calendar::where('day',  $req->input('date'))->update(['timetable' => json_encode($sh)]);
     }else {
       // создание записи
-      echo "create";
+      // echo "create";
       calendar::insert(['day'  => $req->input('date'), 'timetable' => json_encode($sh)]);
     }
-    echo "<a href='/list'>list</a>";
+    // echo "<a href='/list'>list</a>";
 
+    return $this->listPage($req);
   }
 
   // Comment
