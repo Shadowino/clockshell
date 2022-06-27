@@ -7,7 +7,7 @@
 #include <WiFiClient.h>
 
 #ifndef STASSID
-#define STASSID "SSID"
+#define STASSID "tp3020"
 #define STAPSK  "1234567890"
 #endif
 
@@ -17,7 +17,8 @@ const char* password = STAPSK;
 char json[1024] = {};
 
 //const char* host = "http://192.168.43.14/shedule.php?list"; // ip адресс сервера для получения расписания
-const char* host = "http://www.srv175113.hoster-test.ru/api/schedile/1";
+//const char* host = "http://www.srv175113.hoster-test.ru/api/schedile/1";
+const char* host = "http://10.0.1.26/api/today";
 const uint16_t port = 17;
 
 void setup() {
@@ -65,14 +66,20 @@ void loop() {
       // file found at server
       if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
         http.getString().toCharArray(json, 1024);
+        Serial.print("http data:");
+//        Serial.println(&json);
 
         DynamicJsonDocument payload(1024);
         deserializeJson(payload, json);
-
-        for (int i = 0; i < payload["times"].size(); i++) {
-          Serial.print(payload["times"][i]["clock"].as<int>());
-          Serial.print(":");
-          Serial.println(payload["times"][i]["minutes"].as<int>());
+        Serial.print("getting data:\n");
+        for (int d = 1; d < 5; d++) {
+//          Serial.print(payload[String(d)][0].as<String>());
+          Serial.print(d);
+          Serial.print(":\n");
+          for (int t = 0; t < 4; t++) {
+            Serial.print("-");
+            Serial.println(payload[String(d)][t].as<String>());
+          }
         }
       }
     } else {
