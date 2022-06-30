@@ -11,6 +11,9 @@
 #define STAPSK  "1234567890"
 #endif
 
+// порт подключения реле
+#define pin_relay 02
+
 const char* ssid     = STASSID;
 const char* password = STAPSK;
 
