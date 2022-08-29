@@ -3,8 +3,11 @@
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 
+#include <DS1302.h>
+
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
+
 
 #ifndef STASSID
 #define STASSID "tp3020"
