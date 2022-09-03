@@ -97,5 +97,4 @@ void loop() {
   Serial.println("closing connection");
   client.stop();
   delay(5000);
-
 }
