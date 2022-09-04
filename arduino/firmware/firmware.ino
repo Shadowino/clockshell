@@ -38,12 +38,12 @@ HTTPClient http; // обьект http подключения wifi
 DynamicJsonDocument payload(1024);
 
 /*
- запрос к серверу и запись полученного ответа от него
- в обьект DynamicJsonDocument payload(1024)
+  запрос к серверу и запись полученного ответа от него
+  в обьект DynamicJsonDocument payload(1024)
 
- возвращает код ответа (200|404|501)
+  возвращает код ответа (200|404|501)
 */
-uint16_t httpReqwest() {
+int httpReqwest() {
   if (DEBUGMODE) {                        // debug mode
     Serial.print("connecting to ");
     Serial.println(host);
@@ -51,7 +51,7 @@ uint16_t httpReqwest() {
   }
 
   if (!http.begin(client, host)) {                // HTTP запрос в network
-    Serial.printf("[HTTP} Unable to connect %d\n", host);
+    Serial.printf("[HTTP} Unable to connect %s\n", host);
     http.end();
     Serial.print("closing connection\n");
     client.stop(); // ???
@@ -69,11 +69,11 @@ uint16_t httpReqwest() {
     return httpCode;
   }
 
-  if (DEBUGMODE) Serial.printf("[HTTP] GET... code: %s\n", httpCode);
+  if (DEBUGMODE) Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
   if (!(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY)) // file not found at server
-  { 
-    Serial.printf("[HTTP] GET... complete, error answer: %s\n", httpCode);
+  {
+    Serial.printf("[HTTP] GET... complete, error answer: %d\n", httpCode);
     http.end();
     Serial.print("closing connection\n");
     client.stop(); // ???
@@ -102,6 +102,7 @@ uint16_t httpReqwest() {
   Serial.print("closing connection\n");
   client.stop(); // ???
   delay(5000);
+  return httpCode;
 }
 
 void setup() {
@@ -128,54 +129,18 @@ void setup() {
 }
 
 void loop() {
-
-  Serial.print("connecting to ");
-  Serial.println(host);
-  WiFiClient client;
-
-  HTTPClient http; // обьект http подключения wifi
-
-  Serial.print("[HTTP] begin...\n");
-  if (http.begin(client, host)) {  // HTTP запрос в network
-
-
-    Serial.print("[HTTP] GET...\n");
-    int httpCode = http.GET(); // $httpCode is status qwestion (200 is OK 404 is not found)
-
-    if (httpCode > 0) {
-      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-      // file found at server
-      if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-        http.getString().toCharArray(json, 1024);
-        Serial.print("http data:");
-        //        Serial.println(&json);
-
-        DynamicJsonDocument payload(1024);
-        deserializeJson(payload, json);
-        Serial.print("getting data:\n");
-        for (int d = 1; d < 5; d++) {
-          //          Serial.print(payload[String(d)][0].as<String>());
-          Serial.print(d);
-          Serial.print(":\n");
-          for (int t = 0; t < 4; t++) {
-            Serial.print("-");
-            Serial.println(payload[String(d)][t].as<String>());
-          }
-        }
+  if (httpReqwest() == 200) {
+    Serial.print("getting data:\n");
+    for (int d = 1; d < 5; d++) {
+      //          Serial.print(payload[String(d)][0].as<String>());
+      Serial.print(d);
+      Serial.print(":\n");
+      for (int t = 0; t < 4; t++) {
+        Serial.print("-");
+        Serial.println(payload[String(d)][t].as<String>());
       }
     }
-    else {
-      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-    }
-
-    http.end();
   }
-  else {
-    Serial.printf("[HTTP} Unable to connect\n");
-  }
-
-  // Close the connection
   Serial.println();
   Serial.println("closing connection");
   client.stop();
